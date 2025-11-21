@@ -24,3 +24,11 @@ struct MovieRepositoryModel {
   let voteCount: Int?
   let overview: String?
 }
+
+extension MoviesRepositoryModel {
+  static let empty: Self = .init(
+    page: nil,
+    movies: nil,
+    totalPages: nil
+  )
+}
