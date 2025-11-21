@@ -86,23 +86,10 @@ extension MoviesUseCase: MoviesUseCaseProtocol {
   }
 
   func search(with searchText: String, and searchPage: Int) -> AnyPublisher<MoviesItems, ModuleError> {
-    return Future { [weak self] promise in
-      guard let self else { return }
-      moviesRepository.getSearchedMovies(with: searchText, and: searchPage)
-        .sink(receiveCompletion: { result in
-          if case .failure(let error) = result {
-            promise(.failure(
-              ModuleError(error: error)
-            ))
-          }
-        }, receiveValue: { [weak self] response in
-          guard let self else { return }
-          promise(.success(
-            self.convert(response)
-          ))
-        })
-        .store(in: &cancellable)
-    }
-    .eraseToAnyPublisher()
+    moviesRepository
+      .getSearchedMovies(with: searchText, and: searchPage)
+      .mapError(ModuleError.init)
+      .map(convert)
+      .eraseToAnyPublisher()
   }
 }
