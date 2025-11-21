@@ -30,32 +30,6 @@ final class MoviesUseCase {
 
   // MARK: - Privates
 
-  private func convert(_ repositoryItem: [MovieRepositoryModel]?) -> [MovieItem] {
-    guard
-      let movies = repositoryItem
-    else { return [] }
-    return movies.compactMap { movie in
-      MovieItem(
-        posterPath: movie.posterPath ?? "",
-        title: movie.title ?? "",
-        releaseDate: movie.releaseDate ?? Date(),
-        genres: movie.genreIDs ?? [],
-        id: movie.id ?? 0,
-        voteAverage: movie.voteAverage ?? 0.0,
-        voteCount: movie.voteCount ?? 0,
-        overview: movie.overview ?? ""
-      )
-    }
-  }
-
-  private func convert(_ repositoryItem: MoviesRepositoryModel?) -> MoviesItems {
-    MoviesItems(
-      page: repositoryItem?.page ?? 0,
-      movies: convert(repositoryItem?.movies),
-      totalPages: repositoryItem?.totalPages ?? 0
-    )
-  }
-
   func convert(_ genres: [GenreRepositoryModel]?) -> [MovieGenre] {
     genres?.compactMap { genre in
       MovieGenre(
@@ -81,7 +55,8 @@ extension MoviesUseCase: MoviesUseCaseProtocol {
     moviesRepository
       .getMovies(for: currentPage)
       .mapError(ModuleError.init)
-      .map(convert)
+      .replaceNil(with: .empty)
+      .map(MovieItemsMapper.map)
       .eraseToAnyPublisher()
   }
 
@@ -89,7 +64,8 @@ extension MoviesUseCase: MoviesUseCaseProtocol {
     moviesRepository
       .getSearchedMovies(with: searchText, and: searchPage)
       .mapError(ModuleError.init)
-      .map(convert)
+      .replaceNil(with: .empty)
+      .map(MovieItemsMapper.map)
       .eraseToAnyPublisher()
   }
 }
