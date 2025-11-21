@@ -30,20 +30,12 @@ final class MoviesUseCase {
 
   // MARK: - Privates
 
-  func convert(_ genres: [GenreRepositoryModel]?) -> [MovieGenre] {
-    genres?.compactMap { genre in
-      MovieGenre(
-        id: genre.id ?? 00,
-        name: genre.name ?? "--"
-      )
-    } ?? []
-  }
-
   func fetchGenres() -> AnyPublisher<[MovieGenre], ModuleError> {
     genresRepository
       .getGenre()
       .mapError(ModuleError.init)
-      .map(convert)
+      .replaceNil(with: .init())
+      .map(MovieGenreMapper.map)
       .eraseToAnyPublisher()
   }
 }
