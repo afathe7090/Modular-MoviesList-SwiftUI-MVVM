@@ -66,25 +66,11 @@ final class MoviesUseCase {
   }
 
   func fetchGenres() -> AnyPublisher<[MovieGenre], ModuleError> {
-    return Future { [weak self] promise in
-      guard let self else { return }
-      genresRepository.getGenre()
-        .sink(receiveCompletion: { result in
-          if case .failure(let error) = result {
-            promise(.failure(
-              ModuleError(error: error)
-            ))
-          }
-        }, receiveValue: { [weak self] response in
-          guard
-            let self,
-            let response
-          else { return }
-          promise(.success(convert(response)))
-        })
-        .store(in: &cancellable)
-    }
-    .eraseToAnyPublisher()
+    genresRepository
+      .getGenre()
+      .mapError(ModuleError.init)
+      .map(convert)
+      .eraseToAnyPublisher()
   }
 }
 
