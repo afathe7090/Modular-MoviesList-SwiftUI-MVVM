@@ -9,7 +9,7 @@ import Combine
 import Foundation
 import MoviesLookups
 
-final class MoviesUseCase {
+final class MoviesUseCase: MoviesUseCaseProtocol {
   // MARK: - Private Vars
 
   private var cancellable: Set<AnyCancellable> = []
@@ -27,8 +27,6 @@ final class MoviesUseCase {
     self.genresRepository = genresRepository
   }
 
-  // MARK: - Privates
-
   func fetchGenres() -> AnyPublisher<[MovieGenre], Error> {
     genresRepository
       .getGenre()
@@ -36,11 +34,7 @@ final class MoviesUseCase {
       .map(MovieGenreMapper.map)
       .eraseToAnyPublisher()
   }
-}
 
-// MARK: - MoviesUseCaseProtocol
-
-extension MoviesUseCase: MoviesUseCaseProtocol {
   func fetchMovies(for currentPage: Int) -> AnyPublisher<MoviesItems, Error> {
     moviesRepository
       .getMovies(for: currentPage)
