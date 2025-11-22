@@ -10,12 +10,6 @@ import Foundation
 import MoviesLookups
 
 final class MoviesUseCase: MoviesUseCaseProtocol {
-  // MARK: - Private Vars
-
-  private var cancellable: Set<AnyCancellable> = []
-
-  // MARK: - Dependencies
-
   private let moviesRepository: MoviesRepositoryProtocol
   private let genresRepository: GenreRepositoryProtocol
 
