@@ -14,6 +14,7 @@ struct MoviesRepositoryModel {
 }
 
 // MARK: - MovieRepositoryModel
+
 struct MovieRepositoryModel {
   let posterPath: String?
   let title: String?
@@ -31,4 +32,10 @@ extension MoviesRepositoryModel {
     movies: nil,
     totalPages: nil
   )
+}
+
+extension Array where Element == MovieRepositoryModel {
+  func eraseToMoviesRepositoryModel(for page: Int) -> MoviesRepositoryModel {
+    MoviesRepositoryModelMapper.map(self, from: page)
+  }
 }
