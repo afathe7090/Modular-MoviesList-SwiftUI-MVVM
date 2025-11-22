@@ -11,9 +11,9 @@ import MANetwork
 protocol MoviesRepositoryProtocol: MoviesRepositoryGettable { }
 
 protocol MoviesRepositoryGettable {
-  func getMovies(for currentPage: Int) -> AnyPublisher<MoviesRepositoryModel?, RepositoryError>
+  func getMovies(for currentPage: Int) -> AnyPublisher<MoviesRepositoryModel?, Error>
   func getSearchedMovies(
     with searchedText: String,
     and searchPage: Int
-  ) -> AnyPublisher<MoviesRepositoryModel?, RepositoryError>
+  ) -> AnyPublisher<MoviesRepositoryModel?, Error>
 }

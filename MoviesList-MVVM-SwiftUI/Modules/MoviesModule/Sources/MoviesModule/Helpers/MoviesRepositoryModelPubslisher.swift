@@ -9,9 +9,9 @@ import DatabaseKit
 import MANetwork
 
 extension MoviesRepositoryModel {
-  func eraseToPublisher() -> AnyPublisher<MoviesRepositoryModel, RepositoryError> {
+  func eraseToPublisher() -> AnyPublisher<MoviesRepositoryModel, Error> {
     Just(self)
-      .setFailureType(to: RepositoryError.self)
+      .setFailureType(to: Error.self)
       .eraseToAnyPublisher()
   }
 }

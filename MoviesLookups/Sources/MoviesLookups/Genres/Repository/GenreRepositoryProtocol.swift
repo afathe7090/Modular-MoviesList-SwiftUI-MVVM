@@ -13,5 +13,5 @@ protocol GenreRepositoryProtocol: GenreRepositoryGettable { }
 
 public
 protocol GenreRepositoryGettable {
-  func getGenre() -> AnyPublisher<[GenreRepositoryModel]?, RepositoryError>
+  func getGenre() -> AnyPublisher<[GenreRepositoryModel]?, Error>
 }

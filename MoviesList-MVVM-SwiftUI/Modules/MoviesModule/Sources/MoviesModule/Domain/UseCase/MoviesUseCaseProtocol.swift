@@ -7,12 +7,11 @@
 
 import Foundation
 import Combine
-import Commons
 
 protocol MoviesUseCaseProtocol {
-  func fetchMovies(for currentPage: Int) -> AnyPublisher<MoviesItems, ModuleError>
-  func fetchGenres() -> AnyPublisher<[MovieGenre], ModuleError>
-  func search(with searchText: String,and searchPage: Int) -> AnyPublisher<MoviesItems, ModuleError>
+  func fetchMovies(for currentPage: Int) -> AnyPublisher<MoviesItems, Error>
+  func fetchGenres() -> AnyPublisher<[MovieGenre], Error>
+  func search(with searchText: String,and searchPage: Int) -> AnyPublisher<MoviesItems, Error>
 }
 
 struct MoviesItems {

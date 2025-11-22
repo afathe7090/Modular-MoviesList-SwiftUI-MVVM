@@ -27,7 +27,7 @@ final class MoviesRepository<Cache: DatabaseProtocol> where Cache.T == MovieEnti
 }
 
 extension MoviesRepository: MoviesRepositoryProtocol {
-  func getMovies(for currentPage: Int) -> AnyPublisher<MoviesRepositoryModel?, RepositoryError> {
+  func getMovies(for currentPage: Int) -> AnyPublisher<MoviesRepositoryModel?, Error> {
     client.getMovies(for: currentPage)
       .fallBack(cacheManager: cacheManager, for: currentPage)
       .eraseToOptionalOutputPublisher()
@@ -37,10 +37,10 @@ extension MoviesRepository: MoviesRepositoryProtocol {
   func getSearchedMovies(
     with searchedText: String,
     and searchPage: Int
-  ) -> AnyPublisher<MoviesRepositoryModel?, RepositoryError> {
+  ) -> AnyPublisher<MoviesRepositoryModel?, Error> {
     client
       .getSearchedMovies(with: searchedText, and: searchPage)
-      .mapError(RepositoryError.init)
+      .mapError { $0 as Error }
       .map(MoviesRepositoryModelMapper.map)
       .eraseToAnyPublisher()
   }
@@ -48,7 +48,7 @@ extension MoviesRepository: MoviesRepositoryProtocol {
 
 
 extension DatabaseProtocol where Self.T == MovieEntity {
-  func getMoviesModelPublisher(from page: Int) -> AnyPublisher<MoviesRepositoryModel, RepositoryError> {
+  func getMoviesModelPublisher(from page: Int) -> AnyPublisher<MoviesRepositoryModel, Error> {
     getAll()
       .map(MovieRepositoryModelMapper.map)
       .eraseToMoviesRepositoryModel(for: page)

@@ -6,7 +6,6 @@
 //
 
 import Combine
-import Commons
 import Foundation
 import MoviesLookups
 
@@ -30,10 +29,9 @@ final class MoviesUseCase {
 
   // MARK: - Privates
 
-  func fetchGenres() -> AnyPublisher<[MovieGenre], ModuleError> {
+  func fetchGenres() -> AnyPublisher<[MovieGenre], Error> {
     genresRepository
       .getGenre()
-      .mapError(ModuleError.init)
       .replaceNil(with: .init())
       .map(MovieGenreMapper.map)
       .eraseToAnyPublisher()
@@ -43,19 +41,17 @@ final class MoviesUseCase {
 // MARK: - MoviesUseCaseProtocol
 
 extension MoviesUseCase: MoviesUseCaseProtocol {
-  func fetchMovies(for currentPage: Int) -> AnyPublisher<MoviesItems, ModuleError> {
+  func fetchMovies(for currentPage: Int) -> AnyPublisher<MoviesItems, Error> {
     moviesRepository
       .getMovies(for: currentPage)
-      .mapError(ModuleError.init)
       .replaceNil(with: .empty)
       .map(MovieItemsMapper.map)
       .eraseToAnyPublisher()
   }
 
-  func search(with searchText: String, and searchPage: Int) -> AnyPublisher<MoviesItems, ModuleError> {
+  func search(with searchText: String, and searchPage: Int) -> AnyPublisher<MoviesItems, Error> {
     moviesRepository
       .getSearchedMovies(with: searchText, and: searchPage)
-      .mapError(ModuleError.init)
       .replaceNil(with: .empty)
       .map(MovieItemsMapper.map)
       .eraseToAnyPublisher()

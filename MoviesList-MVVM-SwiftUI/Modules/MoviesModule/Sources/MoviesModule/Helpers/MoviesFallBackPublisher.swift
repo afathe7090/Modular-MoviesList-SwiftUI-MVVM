@@ -13,7 +13,7 @@ import MANetwork
 extension Publisher where Output == MoviesNetworkResponse, Failure == SessionDataTaskError {
   func fallBack<Cache: DatabaseProtocol>(
     cacheManager: Cache, for page: Int
-  ) -> AnyPublisher<MoviesRepositoryModel, RepositoryError> where Cache.T == MovieEntity {
+  ) -> AnyPublisher<MoviesRepositoryModel, Error> where Cache.T == MovieEntity {
     map(MoviesRepositoryModelMapper.map)
       .catch { _ in
         cacheManager
